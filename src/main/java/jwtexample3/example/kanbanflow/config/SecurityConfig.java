@@ -50,6 +50,7 @@ public class SecurityConfig {
                                                                                 .anyRequest().authenticated())
                 .formLogin(form-> {
                     //YOU CAN SET YOUR  login page
+                    form.loginPage("/login");
                 });
         return http.build();
 
