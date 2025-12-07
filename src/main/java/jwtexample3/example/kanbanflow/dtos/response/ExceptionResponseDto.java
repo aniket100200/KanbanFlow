@@ -10,6 +10,6 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ExceptionResponseDto {
+public class ExceptionResponseDto extends UserResponseDto {
     String message;
 }
