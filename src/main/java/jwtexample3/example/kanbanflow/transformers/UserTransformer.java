@@ -1,8 +1,10 @@
 package jwtexample3.example.kanbanflow.transformers;
 
 import jwtexample3.example.kanbanflow.dtos.request.UserRequestDto;
+import jwtexample3.example.kanbanflow.dtos.response.JwtResponse;
 import jwtexample3.example.kanbanflow.dtos.response.UserResponseDto;
 import jwtexample3.example.kanbanflow.models.User;
+import org.springframework.security.core.userdetails.UserDetails;
 
 public class UserTransformer {
     public static User getUserFromRequest(UserRequestDto userRequestDto) {

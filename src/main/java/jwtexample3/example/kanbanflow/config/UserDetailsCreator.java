@@ -19,7 +19,7 @@ public class UserDetailsCreator implements UserDetails {
    List<GrantedAuthority> authorities ;
 
     public UserDetailsCreator(User user) {
-        this.username = user.getPhone();
+        this.username = user.getEmail();
         this.password = user.getPassword();
         this.authorities = new  ArrayList<>();
         Set<Role> roles = user.getRoles();
