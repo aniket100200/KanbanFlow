@@ -31,4 +31,17 @@ public class UserTransformer {
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName()).roles(user.getRoles()).build();
     }
+
+
+    public static User getUpdatedUser(User user, UserRequestDto userRequestDto) {
+        if(userRequestDto.getFirstName()!=null)user.setFirstName(userRequestDto.getFirstName());
+        if(userRequestDto.getLastName()!=null)user.setLastName(userRequestDto.getLastName());
+        if(userRequestDto.getEmail()!=null)user.setEmail(userRequestDto.getEmail());
+        if(userRequestDto.getPhone()!=null)user.setPhone(userRequestDto.getPhone());
+        if(userRequestDto.getState()!=null)user.setState(userRequestDto.getState());
+        if(userRequestDto.getCity()!=null)user.setCity(userRequestDto.getCity());
+        if(userRequestDto.getAddress()!=null)user.setAddress(userRequestDto.getAddress());
+
+        return user;
+    }
 }

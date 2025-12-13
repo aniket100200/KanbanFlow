@@ -1,6 +1,7 @@
 package jwtexample3.example.kanbanflow.service.Imp;
 
 import jwtexample3.example.kanbanflow.customExceptions.PasswordNotFoundException;
+import jwtexample3.example.kanbanflow.customExceptions.UserNotFoundException;
 import jwtexample3.example.kanbanflow.dtos.request.UserRequestDto;
 import jwtexample3.example.kanbanflow.dtos.response.UserResponseDto;
 import jwtexample3.example.kanbanflow.enums.Role;
@@ -42,13 +43,18 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public UserResponseDto updateUser(UserRequestDto userRequestDto) {
-        return null;
+    public UserResponseDto updateUser(UserRequestDto userRequestDto,String uuid) {
+        User user = userRepository.findById(uuid).orElseThrow();
+        if(userRequestDto.getPassword()!=null)user.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
+        user = UserTransformer.getUpdatedUser(user,userRequestDto);
+        User savedUser = userRepository.save(user);
+        return UserTransformer.getUserResponseDto(savedUser);
     }
 
     @Override
     public UserResponseDto deleteUser(String uuid) {
-        return null;
+         userRepository.deleteById(uuid);
+        return UserResponseDto.builder().message("User deleted successfully").build();
     }
 
     @Override
@@ -67,8 +73,10 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public UserResponseDto getUserByPhone(UserRequestDto userRequestDto) {
-        return null;
+    public UserResponseDto getUserByPhone(String phone) throws UserNotFoundException {
+        User user = userRepository.findByPhone(phone);
+        if(user!=null)return UserTransformer.getUserResponseDto(user);
+        throw new UserNotFoundException("User not found");
     }
 
     @Override

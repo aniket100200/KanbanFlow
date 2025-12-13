@@ -33,8 +33,8 @@ public class User {
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     @CollectionTable(
-            name = "t_user_roles",
-            joinColumns = @JoinColumn(name = "user_id")
+    name = "t_user_roles",
+    joinColumns = @JoinColumn(name = "user_id")
     )
     Set<Role> roles;
 
