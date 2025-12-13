@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.client.RestTemplate;
 
 @Configuration
 public class SecurityConfig {
@@ -50,7 +51,7 @@ public class SecurityConfig {
                                                                                 .anyRequest().authenticated())
                 .formLogin(form-> {
                     //YOU CAN SET YOUR  login page
-                    form.loginPage("/login");
+//                    form.loginPage("/login");
                 });
         return http.build();
 
@@ -63,5 +64,10 @@ public class SecurityConfig {
         DaoAuthenticationProvider daoAuthenticationProvider =new DaoAuthenticationProvider(getUserDetailsService());
         daoAuthenticationProvider.setPasswordEncoder(getPasswordEncoder());
         return daoAuthenticationProvider;
+    }
+
+    @Bean
+    public RestTemplate getRestTemplate(){
+        return new RestTemplate();
     }
 }
