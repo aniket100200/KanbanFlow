@@ -1,8 +1,11 @@
 package jwtexample3.example.kanbanflow.models;
 
 import jakarta.persistence.*;
+import jwtexample3.example.kanbanflow.enums.Role;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.util.Set;
 
 @Entity
 @Table(name = "t_user")
@@ -25,6 +28,15 @@ public class User {
     @Column(nullable = false, unique = true)
     String phone;
     String password;
+
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Enumerated(EnumType.STRING)
+    @CollectionTable(
+    name = "t_user_roles",
+    joinColumns = @JoinColumn(name = "user_id")
+    )
+    Set<Role> roles;
 
 
     String address;

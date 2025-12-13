@@ -17,4 +17,5 @@ public class UserRequestDto {
     String state;
     String email;
     String phone;
+    String password;
 }
