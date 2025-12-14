@@ -21,4 +21,12 @@ public class Board {
     @Column(name = "owner_id")
     String ownerId;
 
+    @OneToMany(mappedBy = "board",cascade = CascadeType.ALL,orphanRemoval = true)
+    java.util.List<TaskColumn> columns = new java.util.ArrayList<>();
+
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    User user;
+
 }

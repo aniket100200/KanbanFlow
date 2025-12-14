@@ -26,7 +26,6 @@ public class SecurityConfig {
        //CSRF -> Cross site Request Forgery
         http.csrf(csrf->csrf.disable())
                 .authorizeHttpRequests(req->req.requestMatchers("/public/**").permitAll().
-                        requestMatchers("/user/hello").permitAll().
                         requestMatchers("/auth/login").permitAll()
                          .requestMatchers("/swagger-ui.html", "/swagger-ui/**").permitAll()
                         .requestMatchers("/v3/api-docs/**").permitAll().

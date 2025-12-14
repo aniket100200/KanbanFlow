@@ -20,8 +20,9 @@ public class Card {
     String title;
     String description;
 
-    @Column(name = "column_id")
-    String columnId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "column_id")
+    TaskColumn column;
 
     Double position;
 

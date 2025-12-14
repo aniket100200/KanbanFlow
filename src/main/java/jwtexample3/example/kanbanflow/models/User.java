@@ -44,4 +44,11 @@ public class User {
     String city;
 
     String state;
+
+    @OneToMany(
+            mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    java.util.List<Board> boards=new java.util.ArrayList<>();
 }
