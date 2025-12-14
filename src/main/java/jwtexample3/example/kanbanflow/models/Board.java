@@ -25,7 +25,7 @@ public class Board {
     java.util.List<TaskColumn> columns = new java.util.ArrayList<>();
 
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     User user;
 

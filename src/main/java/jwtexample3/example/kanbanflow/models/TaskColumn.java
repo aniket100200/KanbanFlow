@@ -18,8 +18,6 @@ public class TaskColumn {
     String id;
 
     String title;
-    @Column(name = "board_id")
-    String boardId;
 
     Double position;
 
