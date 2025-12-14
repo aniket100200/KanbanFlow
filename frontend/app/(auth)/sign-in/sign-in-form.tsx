@@ -18,6 +18,8 @@ import {
 } from "@/components/ui/input-group";
 import { LockKeyhole, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { loginUser } from "@/actions";
 
 const formSchema = z.object({
   email: z.email(),
@@ -27,6 +29,7 @@ const formSchema = z.object({
 });
 
 export const SignInForm = () => {
+  const router = useRouter();
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -39,22 +42,8 @@ export const SignInForm = () => {
   // 2. Define a submit handler.
   async function onSubmit({ email, password }: z.infer<typeof formSchema>) {
     try {
-      const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
-
-      // 2. Make the request
-      const res = await fetch(`${baseUrl}/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
-      });
-
-      const data = res.json();
-      console.log(data);
+      await loginUser({ email, password });
+      router.push("/dashboard");
     } catch (err) {
       console.log(err);
     }
@@ -64,7 +53,7 @@ export const SignInForm = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-8 w-full mt-2"
+        className="mt-2 w-full space-y-8"
       >
         <FormField
           control={form.control}
