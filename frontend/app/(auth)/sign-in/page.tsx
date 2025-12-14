@@ -1,7 +1,8 @@
 import { SignInForm } from "@/app/(auth)/sign-in/sign-in-form";
 import { Logo } from "@/components/logo";
+import Link from "next/link";
 
-export const SignInPage = () => {
+const SignInPage = () => {
   return (
     <div className="w-full h-full flex flex-col items-center gap-4 justify-center border px-12 border-gray-100 rounded-2xl">
       <div className="flex w-full justify-center items-center gap-2">
@@ -18,6 +19,10 @@ export const SignInPage = () => {
         and timelines all in one simple, powerful workspace.
       </p>
       <SignInForm />
+      <Link href="../sign-up">
+        <p className="text-blue-400 underline">Don't have an account?</p>
+      </Link>
     </div>
   );
 };
+export default SignInPage;

@@ -6,7 +6,6 @@ import { z } from "zod";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -18,7 +17,6 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group";
 import { LockKeyhole, Mail } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 
 const formSchema = z.object({
@@ -39,10 +37,27 @@ export const SignInForm = () => {
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  async function onSubmit({ email, password }: z.infer<typeof formSchema>) {
+    try {
+      const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+
+      // 2. Make the request
+      const res = await fetch(`${baseUrl}/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
+
+      const data = res.json();
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   return (
@@ -63,6 +78,7 @@ export const SignInForm = () => {
                     type={"email"}
                     placeholder="your@email.com"
                     className="h-8"
+                    {...field}
                   />
                   <InputGroupAddon>
                     <Mail />
@@ -85,6 +101,7 @@ export const SignInForm = () => {
                     className="h-8"
                     type={"password"}
                     placeholder="*********"
+                    {...field}
                   />
                   <InputGroupAddon>
                     <LockKeyhole />
@@ -102,3 +119,4 @@ export const SignInForm = () => {
     </Form>
   );
 };
+export default SignInForm;
