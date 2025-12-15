@@ -5,16 +5,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class BoardResponseDao {
+public class CardResponseDto {
     String id;
-    String name;
-    String ownerId;
-    String userId;
-    List<TaskColumnResponseDto> columns;
+    String title;
+    String description;
+    Double position;
+    String columnId;
 }
