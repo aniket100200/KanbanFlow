@@ -5,4 +5,7 @@ import jwtexample3.example.kanbanflow.dtos.response.CardResponseDto;
 
 public interface CardService {
     CardResponseDto createCard(CardRequestDto cardRequestDto);
+    void deleteCard(String cardUuid);
+    CardResponseDto updateCard(CardRequestDto cardRequestDto,String cardUuid);
+    CardResponseDto getCard(String cardUuid);
 }
