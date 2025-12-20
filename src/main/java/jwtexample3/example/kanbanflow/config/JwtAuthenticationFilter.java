@@ -4,6 +4,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
@@ -46,52 +47,79 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         logger.info(" Header :  {}", requestHeader);
         String username = null;
         String token = null;
-        if (requestHeader != null && requestHeader.startsWith("Bearer")) {
-            //looking good
-            token = requestHeader.substring(7);
-            try {
+//        if (requestHeader != null && requestHeader.startsWith("Bearer")) {
+//            //looking good
+//            token = requestHeader.substring(7);
+//            try {
+//
+//                username = this.jwtHelper.getUsernameFromToken(token);
+//
+//            } catch (IllegalArgumentException e) {
+//                logger.info("Illegal Argument while fetching the username !!");
+//                e.printStackTrace();
+//            } catch (ExpiredJwtException e) {
+//                logger.info("Given jwt token is expired !!");
+//                e.printStackTrace();
+//            } catch (MalformedJwtException e) {
+//                logger.info("Some changed has done in token !! Invalid Token");
+//                e.printStackTrace();
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//
+//            }
+//
+//
+//        } else {
+//            logger.info("Invalid Header Value !! ");
+//        }
 
-                username = this.jwtHelper.getUsernameFromToken(token);
-
-            } catch (IllegalArgumentException e) {
-                logger.info("Illegal Argument while fetching the username !!");
-                e.printStackTrace();
-            } catch (ExpiredJwtException e) {
-                logger.info("Given jwt token is expired !!");
-                e.printStackTrace();
-            } catch (MalformedJwtException e) {
-                logger.info("Some changed has done in token !! Invalid Token");
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
-
+        if(request.getCookies()!=null){
+            for(Cookie cookie:request.getCookies()){
+                if("token".equals(cookie.getName()) && cookie.getValue()!=null){
+                    token = cookie.getValue();
+                }
             }
-
-
-        } else {
-            logger.info("Invalid Header Value !! ");
         }
 
 
-        //
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+//        //
+//        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+//
+//
+//            //fetch user detail from username
+//            UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+//            Boolean validateToken = this.jwtHelper.validateToken(token, userDetails);
+//            if (validateToken) {
+//
+//                //set the authentication
+//                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+//                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+//                SecurityContextHolder.getContext().setAuthentication(authentication);
+//
+//
+//            } else {
+//                logger.info("Validation fails !!");
+//            }
+//
+//
+//        }
 
+        if(token!=null && SecurityContextHolder.getContext().getAuthentication()==null){
+          username = this.jwtHelper.getUsernameFromToken(token);
 
             //fetch user detail from username
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+
             Boolean validateToken = this.jwtHelper.validateToken(token, userDetails);
-            if (validateToken) {
 
-                //set the authentication
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            if(validateToken){
+                //set authentication in context
+                UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-
-
-            } else {
+            }else{
                 logger.info("Validation fails !!");
             }
-
 
         }
 

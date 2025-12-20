@@ -1,5 +1,7 @@
 package jwtexample3.example.kanbanflow.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jwtexample3.example.kanbanflow.config.JwtHelper;
 import jwtexample3.example.kanbanflow.customExceptions.UserNotFoundException;
 import jwtexample3.example.kanbanflow.dtos.request.UserRequestDto;
 import jwtexample3.example.kanbanflow.dtos.response.ExceptionResponseDto;
@@ -15,10 +17,12 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "*")
 public class UserController {
     private final UserService userService;
+
     @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
     }
+
 
     @PostMapping("/create")
     public ResponseEntity createUser(@RequestBody UserRequestDto userRequestDto) {
