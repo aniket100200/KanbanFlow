@@ -45,7 +45,7 @@ public class AuthController {
         cookie.setHttpOnly(true);      // Important: JS cannot read this
         cookie.setSecure(false);       // Set to true in production (HTTPS)
         cookie.setPath("/");           // Available for all routes
-        cookie.setMaxAge(60); // 7 days expiration
+        cookie.setMaxAge(3*24*60*60); // 3 days expiration
 
         response.addCookie(cookie);
         JwtResponse jwtResponse = JwtResponse.builder()
@@ -54,37 +54,37 @@ public class AuthController {
         return ResponseEntity.ok(jwtResponse);
     }
 
-//    @GetMapping("/me")
-//    public ResponseEntity<?> getCurrentUser(@CookieValue(name = "token", defaultValue = "") String token) {
-//        if(token.isEmpty()){
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No token found");
-//        }
-//
-//        // Use your existing public method
-//        Date expirationDate = helper.getExpirationDateFromToken(token);
-//
-//        // Check if current date is after expiration date
-//        if (expirationDate.before(new Date())) {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token has expired");
-//        }
-//
-//
-//        String username = helper.getUsernameFromToken(token);
-//        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-//        return ResponseEntity.ok(userDetails);
-//
-//
-//    }
-
-
     @GetMapping("/me")
-    public ResponseEntity<?> getCurrentUser(@AuthenticationPrincipal UserDetails userDetails) {
-        // 'userDetails' is the authenticated user coming from Spring's internal storage
-        if (userDetails == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    public ResponseEntity<?> getCurrentUser(@CookieValue(name = "token", defaultValue = "") String token) {
+        if(token.isEmpty()){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No token found");
         }
+
+        // Use your existing public method
+        Date expirationDate = helper.getExpirationDateFromToken(token);
+
+        // Check if current date is after expiration date
+        if (expirationDate.before(new Date())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token has expired");
+        }
+
+
+        String username = helper.getUsernameFromToken(token);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         return ResponseEntity.ok(userDetails);
+
+
     }
+
+
+//    @GetMapping("/me")
+//    public ResponseEntity<?> getCurrentUser(@AuthenticationPrincipal UserDetails userDetails) {
+//        // 'userDetails' is the authenticated user coming from Spring's internal storage
+//        if (userDetails == null) {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+//        }
+//        return ResponseEntity.ok(userDetails);
+//    }
 
     private void doAuthenticate(String email, String password) {
 
