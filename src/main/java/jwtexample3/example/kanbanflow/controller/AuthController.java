@@ -1,18 +1,17 @@
 package jwtexample3.example.kanbanflow.controller;
 
 import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jwtexample3.example.kanbanflow.config.JwtHelper;
 import jwtexample3.example.kanbanflow.dtos.request.JwtRequest;
 import jwtexample3.example.kanbanflow.dtos.response.JwtResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +21,9 @@ import java.util.Date;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
+
+    @Value("${jwt.cookie.secure}")
+    private Boolean setSecure;
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -43,7 +45,7 @@ public class AuthController {
 
         Cookie cookie = new Cookie("token", token);
         cookie.setHttpOnly(true);      // Important: JS cannot read this
-        cookie.setSecure(false);       // Set to true in production (HTTPS)
+        cookie.setSecure(this.setSecure);// Set to true in production (HTTPS)
         cookie.setPath("/");           // Available for all routes
         cookie.setMaxAge(3*24*60*60); // 3 days expiration
 
