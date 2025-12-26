@@ -20,6 +20,7 @@ import { LockKeyhole, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { loginUser } from "@/actions";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   email: z.email(),
@@ -45,7 +46,17 @@ export const SignInForm = () => {
       await loginUser({ email, password });
       router.push("/dashboard");
     } catch (err) {
-      console.log(err);
+      toast.message("Please enter a valid email or password", {
+        description: new Date().toLocaleString("en-US", {
+          weekday: "short", // Mon
+          year: "numeric",
+          month: "short", // Sep
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        }),
+      });
     }
   }
 

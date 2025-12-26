@@ -6,7 +6,7 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
     <SidebarProvider>
       <AppSidebar />
       <SidebarTrigger />
-      <div className="mx-auto h-screen w-full max-w-5xl">{children}</div>
+      <div className="mx-auto h-screen w-full max-w-7xl">{children}</div>
     </SidebarProvider>
   );
 }
