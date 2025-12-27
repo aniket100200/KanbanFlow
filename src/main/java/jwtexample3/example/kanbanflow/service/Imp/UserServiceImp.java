@@ -80,7 +80,16 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public UserResponseDto getUserByEmail(UserRequestDto userRequestDto) {
-        return null;
+    public UserResponseDto getUserByEmail(String email) {
+       User user =  userRepository.findByEmail(email);
+       if(user!=null)return UserTransformer.getUserResponseDto(user);
+
+       throw new UserNotFoundException("User not found");
+    }
+
+
+    @Override
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 }

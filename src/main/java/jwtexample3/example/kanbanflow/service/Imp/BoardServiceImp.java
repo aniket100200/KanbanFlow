@@ -1,5 +1,6 @@
 package jwtexample3.example.kanbanflow.service.Imp;
 
+import jakarta.servlet.http.HttpSession;
 import jwtexample3.example.kanbanflow.customExceptions.BoardNotFoundException;
 import jwtexample3.example.kanbanflow.customExceptions.UserNotFoundException;
 import jwtexample3.example.kanbanflow.dtos.request.BoardRequestDao;
@@ -24,6 +25,9 @@ public class BoardServiceImp implements BoardService {
     private final BoardRepository boardRepository;
 
     @Autowired
+    HttpSession session;
+
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
@@ -43,6 +47,14 @@ public class BoardServiceImp implements BoardService {
     @Override
     public BoardResponseDao createBoard(BoardRequestDao requestDao) {
         Board board = BoardTransformer.boardRequestDaoToBoard(requestDao);
+        try{
+            User sessionUser = (User) session.getAttribute("user");
+            if(sessionUser==null) throw new UserNotFoundException("User not found");
+            board.setOwnerId(sessionUser.getId());
+            board.setUser(sessionUser);
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }
         //you'll have to set User.
         Optional<User> optional = userRepository.findById(requestDao.getOwnerId());
 
@@ -50,6 +62,7 @@ public class BoardServiceImp implements BoardService {
 
         //set User
         User user = optional.get();
+        if(board.getUser()!=null)
         board.setUser(user);
 
         //Set columns

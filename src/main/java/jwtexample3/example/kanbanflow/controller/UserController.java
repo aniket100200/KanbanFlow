@@ -77,4 +77,16 @@ public class UserController {
     }
 
 
+    @GetMapping("/getByEmail/{email}")
+    public ResponseEntity getUserByEmail(@PathVariable("email") String email, HttpServletRequest request){
+        try{
+            UserResponseDto userResponseDto = userService.getUserByEmail(email);
+            return ResponseEntity.ok(userResponseDto);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+    }
+
+
 }

@@ -2,9 +2,11 @@ package jwtexample3.example.kanbanflow.controller;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jwtexample3.example.kanbanflow.config.JwtHelper;
 import jwtexample3.example.kanbanflow.dtos.request.JwtRequest;
 import jwtexample3.example.kanbanflow.dtos.response.JwtResponse;
+import jwtexample3.example.kanbanflow.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -31,6 +33,13 @@ public class AuthController {
     @Autowired
     private AuthenticationManager manager;
 
+    @Autowired
+    private HttpSession session;
+
+    @Autowired
+    private UserService userService;
+
+
 
     @Autowired
     private JwtHelper helper;
@@ -48,6 +57,8 @@ public class AuthController {
         cookie.setSecure(this.setSecure);// Set to true in production (HTTPS)
         cookie.setPath("/");           // Available for all routes
         cookie.setMaxAge(3*24*60*60); // 3 days expiration
+
+        session.setAttribute("user", userService.findByEmail(request.getEmail()));
 
         response.addCookie(cookie);
         JwtResponse jwtResponse = JwtResponse.builder()
