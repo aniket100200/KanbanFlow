@@ -18,11 +18,13 @@ public class TaskColumnTransformer {
         return TaskColumnResponseDto.builder()
                 .id(taskColumn.getId()).
                 title(taskColumn.getTitle()).
+                boardId(taskColumn.getBoard().getId()).
+                position(taskColumn.getPosition()).
                 cards(cards).
         build() ;
     }
 
     public static TaskColumn taskColumnRequestDtoToTaskColumn(TaskColumnRequestDto taskColumnRequestDto){
-        return TaskColumn.builder().title(taskColumnRequestDto.getTitle()).build();
+        return TaskColumn.builder().title(taskColumnRequestDto.getTitle()).position(taskColumnRequestDto.getPosition()).build();
     }
 }
