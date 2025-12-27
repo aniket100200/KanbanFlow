@@ -4,6 +4,10 @@ export function proxy(req: NextRequest, res: NextResponse) {
   const token = req.cookies.get("token")?.value;
   const { pathname } = req.nextUrl;
 
+  if (pathname === "/") {
+    return NextResponse.redirect(new URL("/dashboard", req.url));
+  }
+
   const publicRoutes = ["/sign-in", "/sign-up", "/forgot-password"];
   const isPublicRoute = publicRoutes.some((route) =>
     pathname.startsWith(route)
