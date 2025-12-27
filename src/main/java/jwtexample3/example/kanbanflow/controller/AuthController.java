@@ -58,7 +58,7 @@ public class AuthController {
         cookie.setPath("/");           // Available for all routes
         cookie.setMaxAge(3*24*60*60); // 3 days expiration
 
-        session.setAttribute("user", userService.findByEmail(request.getEmail()));
+        session.setAttribute("user", userService.getUserByEmail(request.getEmail()));
 
         response.addCookie(cookie);
         JwtResponse jwtResponse = JwtResponse.builder()

@@ -59,12 +59,14 @@ public class UserServiceImp implements UserService {
 
     @Override
     public UserResponseDto deleteUserByPhone(String phone) {
-        return null;
+        userRepository.deleteByPhone(phone);
+        return UserResponseDto.builder().message("User deleted successfully").build();
     }
 
     @Override
     public UserResponseDto deleteUserByEmail(String email) {
-        return null;
+        userRepository.deleteByEmail(email);
+        return UserResponseDto.builder().message("User deleted successfully").build();
     }
 
     @Override

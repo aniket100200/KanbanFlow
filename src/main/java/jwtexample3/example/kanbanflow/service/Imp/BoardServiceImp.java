@@ -5,6 +5,7 @@ import jwtexample3.example.kanbanflow.customExceptions.BoardNotFoundException;
 import jwtexample3.example.kanbanflow.customExceptions.UserNotFoundException;
 import jwtexample3.example.kanbanflow.dtos.request.BoardRequestDao;
 import jwtexample3.example.kanbanflow.dtos.response.BoardResponseDao;
+import jwtexample3.example.kanbanflow.dtos.response.UserResponseDto;
 import jwtexample3.example.kanbanflow.models.Board;
 import jwtexample3.example.kanbanflow.models.TaskColumn;
 import jwtexample3.example.kanbanflow.models.User;
@@ -48,22 +49,15 @@ public class BoardServiceImp implements BoardService {
     public BoardResponseDao createBoard(BoardRequestDao requestDao) {
         Board board = BoardTransformer.boardRequestDaoToBoard(requestDao);
         try{
-            User sessionUser = (User) session.getAttribute("user");
+            UserResponseDto sessionUser = (UserResponseDto) session.getAttribute("user");
             if(sessionUser==null) throw new UserNotFoundException("User not found");
             board.setOwnerId(sessionUser.getId());
-            board.setUser(sessionUser);
+            User user = userRepository.findById(sessionUser.getId()).orElseThrow();
+
+            board.setUser(user);
         }catch (Exception e){
             throw new RuntimeException(e);
         }
-        //you'll have to set User.
-        Optional<User> optional = userRepository.findById(requestDao.getOwnerId());
-
-        if(optional.isEmpty())throw new UserNotFoundException("User not found");
-
-        //set User
-        User user = optional.get();
-        if(board.getUser()!=null)
-        board.setUser(user);
 
         //Set columns
         board.setColumns(new ArrayList<TaskColumn>());
@@ -79,10 +73,9 @@ public class BoardServiceImp implements BoardService {
         if(requestDao.getName()!=null)board.setName(requestDao.getName());
         if(requestDao.getOwnerId()!=null)board.setOwnerId(requestDao.getOwnerId());
 
-        Optional<User> optional = userRepository.findById(requestDao.getUserId());
+        UserResponseDto sessionUser = (UserResponseDto) this.session.getAttribute("user");
+        User user = userRepository.findById(sessionUser.getId()).orElseThrow();
 
-        if(optional.isEmpty())throw new UserNotFoundException("User not found");
-        User user = optional.get();
         board.setUser(user);
 
         board = boardRepository.save(board);
