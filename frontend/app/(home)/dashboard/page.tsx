@@ -1,10 +1,58 @@
-import { Clock, LayoutPanelTop } from "lucide-react";
+import { Clock, LayoutPanelTop, PlusIcon } from "lucide-react";
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { createBoard } from "@/actions";
+import { toast } from "sonner";
 
-const Dashboard = () => {
+const Dashboard = async () => {
+  // const allBoards = await getAllBoards();
+
   return (
-    <div className="h-full w-full p-6">
-      <div className="flex flex-col gap-8">
+    <div className="flex h-full w-full flex-col gap-4 p-6">
+      <div className="flex h-10 w-full items-center">
+        <div className="ml-auto">
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button className="rounded-full">
+                <PlusIcon className="size-4" />
+                Create Board
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Create Board</DialogTitle>
+              </DialogHeader>
+              <div className="flex flex-1 flex-col gap-2">
+                <Label htmlFor="boardname">Board title</Label>
+                <Input
+                  id="board_name"
+                  name="boardname"
+                  placeholder="Your board name"
+                />
+              </div>
+              <DialogFooter>
+                <Button
+                  className="rounded-md"
+                  onClick={() => handleOnCreateBoard("")}
+                >
+                  Create
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        </div>
+      </div>
+      <div className="flex flex-1 flex-col gap-8">
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-2">
             <LayoutPanelTop className="size-5 text-neutral-800" />
@@ -84,6 +132,15 @@ function Card({
       <p className="p-2 text-xs font-medium text-neutral-800">{cardTitle}</p>
     </div>
   );
+}
+
+async function handleOnCreateBoard(boardName: string) {
+  const res = await createBoard(boardName);
+  if (res.status === 200) {
+    toast.success("Board successfully created!");
+  } else {
+    toast.error("Error while creating board!");
+  }
 }
 
 export default Dashboard;

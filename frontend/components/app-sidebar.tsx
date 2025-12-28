@@ -1,5 +1,5 @@
 "use client";
-import { ChevronDown, PanelsTopLeft } from "lucide-react";
+import { ChevronDown, HomeIcon, PanelsTopLeft } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -26,11 +26,17 @@ import Link from "next/link";
 // Menu items.
 const navigateItems = [
   {
+    title: "Home",
+    icon: HomeIcon,
+    dropdown: false,
+    href: "/dashboard",
+  },
+  {
     title: "Boards",
     icon: PanelsTopLeft,
     dropdown: true,
     url: "",
-    href: "/boards",
+    href: "/board",
   },
 ];
 
@@ -66,14 +72,7 @@ export function AppSidebar() {
                 const { title, icon: Icon, dropdown, url, href } = item;
                 return (
                   <SidebarMenuItem key={title}>
-                    {url ? (
-                      <SidebarMenuButton asChild>
-                        <a href={url}>
-                          <Icon />
-                          <span>{title}</span>
-                        </a>
-                      </SidebarMenuButton>
-                    ) : dropdown ? (
+                    {dropdown ? (
                       <Collapsible
                         open={openMenu === title}
                         onOpenChange={(open) =>
@@ -114,9 +113,11 @@ export function AppSidebar() {
                         </CollapsibleContent>
                       </Collapsible>
                     ) : (
-                      <SidebarMenuButton>
-                        <Icon />
-                        <span>{title}</span>
+                      <SidebarMenuButton asChild>
+                        <Link href={href}>
+                          <Icon />
+                          <span>{title}</span>
+                        </Link>
                       </SidebarMenuButton>
                     )}
                   </SidebarMenuItem>

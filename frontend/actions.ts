@@ -1,9 +1,9 @@
 "use server";
 import { cookies } from "next/headers";
 
-export async function registerUser(formData: any) {
-  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
+export async function registerUser(formData: any) {
   const res = await fetch(`${baseUrl}/user/create`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -15,8 +15,6 @@ export async function registerUser(formData: any) {
 }
 
 export async function loginUser(formData: any) {
-  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
-
   const res = await fetch(`${baseUrl}/auth/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -39,5 +37,24 @@ export async function loginUser(formData: any) {
       maxAge: 3 * 24 * 60 * 60, // Match your Spring Boot 3-day logic
     });
   }
+  return await res.json();
+}
+
+export async function getAllBoards() {
+  const res = await fetch(`${baseUrl}/board/getAll`);
+
+  if (!res.ok) throw new Error("Failed to getAllBoards");
+
+  return await res.json();
+}
+
+export async function createBoard(boardTitle: string) {
+  const res = await fetch(`${baseUrl}/board/create`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name: boardTitle }),
+  });
+
+  if (!res.ok) throw new Error("Failed to create board");
   return await res.json();
 }
