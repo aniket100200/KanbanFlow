@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpSession;
 import jwtexample3.example.kanbanflow.config.JwtHelper;
 import jwtexample3.example.kanbanflow.dtos.request.JwtRequest;
 import jwtexample3.example.kanbanflow.dtos.response.JwtResponse;
+import jwtexample3.example.kanbanflow.dtos.response.UserResponseDto;
 import jwtexample3.example.kanbanflow.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -57,12 +58,17 @@ public class AuthController {
         cookie.setSecure(this.setSecure);// Set to true in production (HTTPS)
         cookie.setPath("/");           // Available for all routes
         cookie.setMaxAge(3*24*60*60); // 3 days expiration
+        UserResponseDto userResponseDto = userService.getUserByEmail(request.getEmail());
 
-        session.setAttribute("user", userService.getUserByEmail(request.getEmail()));
+        session.setAttribute("user",userResponseDto);
 
         response.addCookie(cookie);
         JwtResponse jwtResponse = JwtResponse.builder()
                 .jwtToken(token)
+                .userId(userResponseDto.getId())
+                .firstName(userResponseDto.getFirstName())
+                .lastName(userResponseDto.getLastName())
+                .email(userResponseDto.getEmail())
                 .username(userDetails.getUsername()).build();
         return ResponseEntity.ok(jwtResponse);
     }

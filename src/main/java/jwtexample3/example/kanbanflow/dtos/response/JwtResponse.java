@@ -16,4 +16,5 @@ public class JwtResponse {
     String lastName;
     String roles;
     String message;
+    String userId;
 }
