@@ -7,16 +7,6 @@
 
 > A modern, real-time collaborative task management platform designed for Agile teams to visualize workflows and boost productivity.
 
----
-
-## 📸 Interface Snapshot
-
-<p align="center">
-  <img src="images/kanbanflow.png" alt="Kanban Board Interface" width="800">
-</p>
-
----
-
 ## 📖 Overview
 
 **KanbanFlow** is a full-stack clone of tools like Trello/Jira, built to demonstrate complex state management and real-time data synchronization. 
